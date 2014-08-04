@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>webgl template</title>
+		<meta http-equiv="content-type" content="text/html"; charset="utf-8">
+		<script type="text/javascript">
+			function initWebGL(canvas){
+				var gl;
+				try{
+					gl=canvas.getContext("experimental-webgl");
+				}
+				catch(e)
+				{
+					var msg="Error creating webgl context!:" +e.toString();
+					alert(msg);
+					throw Error(msg);
+				}
+				return gl;
+			}	
+			function initViewport(gl,canvas)
+			{
+				gl.viewport(0,0,canvas.width,canvas.height);
+			}
+		    function createSquare(gl){
+		        var vertexBuffer;
+		        vertexBuffer=gl.createBuffer();
+		        gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer);
+		        var verts=[
+		        	.5,.5,0.0,
+		        	-.5,.5,0.0,
+		        	.5,-.5,0.0,
+		        	-.5,-.5,0.0
+		        ];
+		        gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(verts),gl.STATIC_DRAW);
+		        var square = {buffer:vertexBuffer,vertSize:3,nVerts:4,primtype:gl.TRIANGLE_STRIP};
+		        return square;
+
+		    }
+		    function initMatrices(){
+		    	modelViewMatrix = new Float32Array([
+		    		1,0,0,0,
+		    		0,1,0,0,
+		    		0,0,1,0,
+		    		0,0,-3.333,1
+		    		]);
+		    	projectinMatrix= new Float32Array([
+		    		2.4142,0,0,0,
+		    		0,2.4142,0,0,
+		    		0,0,-1.002002,-1,
+		    		0,0,-0.2002002,0
+		    		]);
+		    }
+		</script>
+
+	</head>
+	<body>
+	<canvas id="webglcanvas" style="border:none;"width="500" height="500"></canvas>
+	</body>
+</html>
