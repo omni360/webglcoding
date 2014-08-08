@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>welcome to webgl chapter2.1</title>
+       	<link rel="stylesheet" href="./css/webglbook.css"> 
+        <script src="./libs/three.js"></script>
+        <script src="./libs/RequestAnimationFrame.js"></script>
+        <script type="text/javascript">
+        var renderer = null,
+        	scene=null,
+        	camera=null,
+        	cube=null,
+        	cubea=null,
+        	animating=false;
+        	function onload(){
+        		//抓取作为Canvas容器的<div>标签
+        		var container = document.getElementById("container");
+
+        		//创建Three.js渲染器，并添加到<div>标签中
+        		renderer = new THREE.WebGLRenderer( {antialias: true} );
+        		renderer.setSize(container.offsetWidth,container.offsetHeight)
+        		container.appendChild(renderer.domElement);
+
+        		//创建Three.js场景
+        		scene = new THREE.Scene();
+        		
+        		//创建相机，并添加到场景中。
+        		camera=new THREE.PerspectiveCamera( 45, container.offsetWidth/container.offsetHeight, 1, 4000 );
+        		camera.position.set(0,0,3);
+
+        		//创建一个平行光光源照射到物体上。
+        		var light = new THREE.DirectionalLight( 0xffffff,1.5 );
+        		light.position.set(0,0,1);
+        		scene.add(light);
+
+        		//创建一个接受光照并带有纹理映射的立方体，并添加到场景中
+        		//首先，创建一个带纹理映射的立方体。
+        		var mapUrl="./images/rocy1.jpg";
+        		var map = THREE.ImageUtils.loadTexture(mapUrl);
+
+        		//创建一个接受光照并带有纹理映射的立方体，并添加到场景中
+        		//首先，创建一个带纹理映射的立方体。
+        		var mapUrla="./images/joe1.jpg";
+        		var mapa = THREE.ImageUtils.loadTexture(mapUrla);
+
+        		//然后创建一个Phong材质来处理着色，并传递给纹理映射。
+        		var material = new THREE.MeshPhongMaterial( {map:map} );
+
+        		//然后创建一个Phong材质来处理着色，并传递给纹理映射。
+        		var materiala = new THREE.MeshPhongMaterial( {map:mapa} );
+
+        		//创建一个立方体的几何体
+        		var geometry = new THREE.CubeGeometry( 1, 1, 1 );
+
+        		//创建一个立方体的几何体
+        		var geometrya = new THREE.CubeGeometry( 1, 1, 1 );
+
+        		//将几何体和材质放到一个网格中
+        		cube = new THREE.Mesh(geometry, material);
+        		cube.position.set(-1.5,0,0);
+
+        		//将几何体和材质放到一个网格中
+        		cubea = new THREE.Mesh(geometrya, materiala);
+        		cubea.position.set(1.5,0,0);
+
+	    		//设置网格在场景中的朝向，否则我们将不会看到立方体的形状。
+        		cube.rotation.x=Math.PI /5;
+        		cube.rotation.y=Math.PI/5;
+
+	    		//设置网格在场景中的朝向，否则我们将不会看到立方体的形状。
+        		cubea.rotation.x=Math.PI /5;
+        		cubea.rotation.y=Math.PI /5;
+
+
+        		//将立方体网格添加到场景中
+        		scene.add(cube);
+
+        		//将立方体网格添加到场景中
+        		scene.add(cubea);
+
+
+        		//添加处理鼠标事件的函数，用于控制动画的开关。
+        		addMouseHandler();
+
+        		//运行渲染循环
+        		run();
+
+        	}
+/*    		function onload()
+			{
+				// Grab our container div
+		        var container = document.getElementById("container");
+
+		        // Create the Three.js renderer, add it to our div
+			    renderer = new THREE.WebGLRenderer( { antialias: true } );
+			    renderer.setSize(container.offsetWidth, container.offsetHeight);
+			    container.appendChild( renderer.domElement );
+
+			    // Create a new Three.js scene
+			    scene = new THREE.Scene();
+
+			    // Put in a camera
+		        camera = new THREE.PerspectiveCamera( 45, container.offsetWidth / container.offsetHeight, 1, 4000 );
+		        camera.position.set( 0, 0, 3 );
+
+		        // Create a directional light to show off the object
+				var light = new THREE.DirectionalLight( 0xffffff, 1.5);
+				light.position.set(0, 0, 1);
+				scene.add( light );
+
+		        // Create a shaded, texture-mapped cube and add it to the scene
+		        // First, create the texture map
+		        var mapUrl = "./images/rocy1.jpg";
+		        var map = THREE.ImageUtils.loadTexture(mapUrl);
+		        
+		        // Now, create a Phong material to show shading; pass in the map
+		        var material = new THREE.MeshPhongMaterial({ map: map });
+
+		        // Create the cube geometry
+		        var geometry = new THREE.CubeGeometry(1, 1, 1);
+
+		        // And put the geometry and material together into a mesh
+		        cube = new THREE.Mesh(geometry, material);
+
+		        // Turn it toward the scene, or we won't see the cube shape!
+		        cube.rotation.x = Math.PI / 5;
+		        cube.rotation.y = Math.PI / 5;
+
+		        // Add the cube to our scene
+		        scene.add(cube);
+
+		        // Add a mouse up handler to toggle the animation
+		        addMouseHandler();
+
+		        // Run our render loop
+		        run();
+			}*/
+        	function run(){
+        		//渲染场景
+        		renderer.render(scene,camera);
+
+        		//在下一帧中旋转立方体
+        		if(animating){
+        			cube.rotation.y-=0.01;
+        			cubea.rotation.y+=0.01;
+        		}
+
+        		//在另一帧中回调
+        		requestAnimationFrame(run);
+        	}
+        	function addMouseHandler(){
+        		var dom = renderer.domElement;
+        		dom.addEventListener('mouseup',onMouseUp,false);
+        	}
+        	function onMouseUp(event){
+        		event.preventDefault();
+        		animating= !animating;
+        	}
+        </script>
+    </head>
+    <body onload="onload()" style="">
+    	<center><h1>Rocy and Joe!</h1></center>
+    	<div id="container" style="width:95%; height:80%;position:absolute;"></div>
+    	<div id="prompt" style="width:95%; height:6%;bottom:0;position:absolute;">
+    		Click to animate the cube
+    	</div>
+
+    </body>
+</html>
